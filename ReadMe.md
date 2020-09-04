@@ -5,7 +5,7 @@ Requirement validation:
 php -version
 
 Run:
-php <path to the project folder>/texas-hold-em.php < <path to your test file> > <path to your results file>
+php \<path to the project folder\>/texas-hold-em.php < \<path to your test file\> > \<path to your results file\>
 
 Notes:
 
