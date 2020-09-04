@@ -1,13 +1,10 @@
 Requirement installation:
-
 sudo apt-get install php
 
 Requirement validation:
-
 php -version
 
 Run:
-
 php <path to the project folder>/texas-hold-em.php < <path to your test file> > <path to your results file>
 
 Notes:
@@ -26,13 +23,16 @@ Input string: 4cKs4h8s7s AD4s Ac4d As9s KhKd 5d6d
 
 Output string: AD4s=Ac4d 5d6d As9s KhKd
 
+
 The same with lowercase d:
 
 Input string: 4cKs4h8s7s Ad4s Ac4d As9s KhKd 5d6d
 
 Output string: Ac4d=Ad4s 5d6d As9s KhKd 
 
+
 Other types of validation can be added as needed.
+
 
 To the best of my knowledge there are no limitations to this script.
 
