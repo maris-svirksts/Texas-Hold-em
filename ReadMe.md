@@ -26,14 +26,9 @@ The same with lowercase d:
 **Input string:**  4cKs4h8s7s Ad4s Ac4d As9s KhKd 5d6d  
 **Output string:** Ac4d=Ad4s 5d6d As9s KhKd 
 
+#### MISC:
 
-Other types of validation can be added as needed.
-
-
-To the best of my knowledge there are no limitations to this script.
-
-
-I do recognize my inexperience with this game and it's edge cases.
-
-
-Would be grateful for any constructive criticism.
+- Other types of validation can be added as needed.
+- To the best of my knowledge there are no limitations to this script.
+- I do recognize my inexperience with this game and it's edge cases.
+- Would be grateful for any constructive criticism.
