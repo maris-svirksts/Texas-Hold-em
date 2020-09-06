@@ -29,6 +29,7 @@ The same with lowercase d:
 #### MISC:
 
 - Other types of validation can be added as needed.
+- The script adds one line of output per one line of input. That includes the EOL character. Thus, at the very end of the output there will be one empty line.
 - To the best of my knowledge there are no limitations to this script.
 - I do recognize my inexperience with this game and it's edge cases.
 - Would be grateful for any constructive criticism.
