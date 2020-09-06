@@ -1,0 +1,18 @@
+No Hands defined.
+Character count wrong for Board. Should be 10.
+Card already exists.
+Card already exists.
+Character count wrong for Board. Should be 10.
+Character count wrong for Hand. Should be 4.
+Rank not recognized.
+AD4s=Ac4d 5d6d As9s KhKd
+Ac4d=Ad4s 5d6d As9s KhKd
+Ac4d KhKd Ad3s 5d6d 4s8s
+KhKd 8c4d Ad3s 5d6d 4s8s
+Ad3s KhKd 5d6d 9c8d 4s8s
+KhKd 5d6d 3d3s 9c8d 4s8s
+5d6d Kh7d 3d3s 9c8d 4s8s
+KhTd 5d6d 3d3s 9c8d 4s8s
+QhTd 5d6d 3d3s 9c8d 4s8s
+4sTh=Ts5h Jh6s KcQd=KdQc
+KdKs 9hJh
