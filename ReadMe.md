@@ -1,5 +1,5 @@
 #### Requirement installation:
-sudo apt-get install php
+sudo apt-get install php or sudo apt install php7.4-cli
 
 #### Requirement validation:
 php -version
