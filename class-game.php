@@ -196,21 +196,19 @@ class Game {
 								)
 							);
 							$this->remove_suits( $hand_key );
-							$this->set_highest_outside_value( $hand_key );
 
-							$this->hand_order[9][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+							$this->hand_order[9][] = $hand_key;
 						} else {
 							$result = $this->get_straight( $rank, $suit );
 
 							$this->remove_used_cards( $hand_key, $result['cards_used'] );
 							$this->remove_suits( $hand_key );
-							$this->set_highest_outside_value( $hand_key );
 
 							if ( $result['straight_flush'] ) {
-								$this->hand_order[8][ $result['highest_value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+								$this->hand_order[8][ $result['highest_value'] ][] = $hand_key;
 							} else {
 								// Mark as flush - it can't be anything better: next thing it can be is three of a kind.
-								$this->hand_order[5][ $result['highest_value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+								$this->hand_order[5][ $result['highest_value'] ][] = $hand_key;
 							}
 						}
 
@@ -281,19 +279,26 @@ class Game {
 	}
 
 	/**
-	 * Set highest kicker card value that's available. Depends on remove_suits function.
+	 * Get highest kicker card value that's available and remove it from the list of available values. Depends on remove_suits function.
 	 *
 	 * @access private
 	 * @param string $hand_key - identificator for hand.
-	 * @return void
+	 * @return int
 	 */
-	private function set_highest_outside_value( $hand_key ) {
+	private function get_highest_outside_value( $hand_key ) {
 		foreach ( $this->rank_values as $rank_key => $rank_value ) { // Go from the highest ranked to lowest.
 			if ( ! empty( $this->hands[ $hand_key ][ $rank_key ] ) ) {
-				$this->hands[ $hand_key ]['highest_outside_value'] = $rank_value;
-				break;
+
+				$this->hands[ $hand_key ][ $rank_key ]--;
+				if ( empty( $this->hands[ $hand_key ][ $rank_key ] ) ) {
+					unset( $this->hands[ $hand_key ][ $rank_key ] );
+				}
+
+				return $rank_value;
 			}
 		}
+
+		return 0;
 	}
 
 	/**
@@ -408,8 +413,8 @@ class Game {
 
 			if ( ! empty( $result ) ) {
 				unset( $this->hands[ $hand_key ][ $result[0] ] );
-				$this->set_highest_outside_value( $hand_key );
-				$this->hand_order[7][ $this->rank_values[ $result[0] ] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+				$highest_kicker = $this->get_highest_outside_value( $hand_key );
+				$this->hand_order[7][ $this->rank_values[ $result[0] ] ][ $highest_kicker ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -435,8 +440,7 @@ class Game {
 				$best_of_two = $this->get_highest_value( $result[2] );
 
 				unset( $this->hands[ $hand_key ][ $result[3][0] ], $this->hands[ $hand_key ][ $best_of_two['key'] ] );
-				$this->set_highest_outside_value( $hand_key );
-				$this->hand_order[6][ $this->rank_values[ $result[3][0] ] ][ $best_of_two['value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+				$this->hand_order[6][ $this->rank_values[ $result[3][0] ] ][ $best_of_two['value'] ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -460,8 +464,7 @@ class Game {
 					$this->hands[ $hand_key ][ $used_card['rank'] ]--;
 				}
 
-				$this->set_highest_outside_value( $hand_key );
-				$this->hand_order[4][ $result['highest_value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+				$this->hand_order[4][ $result['highest_value'] ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -485,8 +488,9 @@ class Game {
 				$best_of_two = $this->get_highest_value( $result );
 
 				unset( $this->hands[ $hand_key ][ $best_of_two['key'] ] );
-				$this->set_highest_outside_value( $hand_key );
-				$this->hand_order[3][ $best_of_two['value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+				$highest_kicker        = $this->get_highest_outside_value( $hand_key );
+				$second_highest_kicker = $this->get_highest_outside_value( $hand_key );
+				$this->hand_order[3][ $best_of_two['value'] ][ $highest_kicker ][ $second_highest_kicker ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -514,8 +518,8 @@ class Game {
 				$best_of_two = $this->get_highest_value( $result );
 
 				unset( $this->hands[ $hand_key ][ $best_of_three['key'] ], $this->hands[ $hand_key ][ $best_of_two['key'] ] );
-				$this->set_highest_outside_value( $hand_key );
-				$this->hand_order[2][ $best_of_three['value'] ][ $best_of_two['value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+				$highest_kicker = $this->get_highest_outside_value( $hand_key );
+				$this->hand_order[2][ $best_of_three['value'] ][ $best_of_two['value'] ][ $highest_kicker ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -536,8 +540,10 @@ class Game {
 
 			if ( ! empty( $result ) ) {
 				unset( $this->hands[ $hand_key ][ $result[0] ] );
-				$this->set_highest_outside_value( $hand_key );
-				$this->hand_order[1][ $this->rank_values[ $result[0] ] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+				$highest_kicker        = $this->get_highest_outside_value( $hand_key );
+				$second_highest_kicker = $this->get_highest_outside_value( $hand_key );
+				$third_highest_kicker  = $this->get_highest_outside_value( $hand_key );
+				$this->hand_order[1][ $this->rank_values[ $result[0] ] ][ $highest_kicker ][ $second_highest_kicker ][ $third_highest_kicker ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -556,8 +562,11 @@ class Game {
 			$this->remove_suits( $hand_key );
 			$highcard = $this->get_highest_value( $hand_values );
 			unset( $this->hands[ $hand_key ][ $highcard['key'] ] );
-			$this->set_highest_outside_value( $hand_key );
-			$this->hand_order[0][ $highcard['value'] ][ $this->hands[ $hand_key ]['highest_outside_value'] ][] = $hand_key;
+			$highest_kicker        = $this->get_highest_outside_value( $hand_key );
+			$second_highest_kicker = $this->get_highest_outside_value( $hand_key );
+			$third_highest_kicker  = $this->get_highest_outside_value( $hand_key );
+			$fourth_highest_kicker = $this->get_highest_outside_value( $hand_key );
+			$this->hand_order[0][ $highcard['value'] ][ $highest_kicker ][ $second_highest_kicker ][ $third_highest_kicker ][ $fourth_highest_kicker ][] = $hand_key;
 			unset( $this->hands[ $hand_key ] );
 		}
 	}
