@@ -36,7 +36,7 @@ while ( ! feof( STDIN ) ) {
 		$game->check_three_of_a_kind();
 		$game->check_two_pairs();
 		$game->two_of_a_kind();
-		$game->highcard();
+		$game->high_card();
 
 		$game->echo_results();
 	}

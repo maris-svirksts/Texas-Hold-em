@@ -555,18 +555,18 @@ class Game {
 	 * @access public
 	 * @return void
 	 */
-	public function highcard() {
+	public function high_card() {
 
 		foreach ( $this->hands as $hand_key => $hand_values ) {
 
 			$this->remove_suits( $hand_key );
-			$highcard = $this->get_highest_value( $hand_values );
-			unset( $this->hands[ $hand_key ][ $highcard['key'] ] );
+			$high_card = $this->get_highest_value( $hand_values );
+			unset( $this->hands[ $hand_key ][ $high_card['key'] ] );
 			$highest_kicker        = $this->get_highest_outside_value( $hand_key );
 			$second_highest_kicker = $this->get_highest_outside_value( $hand_key );
 			$third_highest_kicker  = $this->get_highest_outside_value( $hand_key );
 			$fourth_highest_kicker = $this->get_highest_outside_value( $hand_key );
-			$this->hand_order[0][ $highcard['value'] ][ $highest_kicker ][ $second_highest_kicker ][ $third_highest_kicker ][ $fourth_highest_kicker ][] = $hand_key;
+			$this->hand_order[0][ $high_card['value'] ][ $highest_kicker ][ $second_highest_kicker ][ $third_highest_kicker ][ $fourth_highest_kicker ][] = $hand_key;
 			unset( $this->hands[ $hand_key ] );
 		}
 	}
