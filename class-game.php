@@ -199,7 +199,23 @@ class Game {
 
 							$this->hand_order[9][] = $hand_key;
 						} else {
+							$cards  = array();
 							$result = $this->get_straight( $rank, $suit );
+
+							// Hotfix. Clean when have time
+							foreach( $result['cards_used'] as $card ) {
+								$cards[ $card['rank'] ] = 1;
+							}
+							// End hotfix.
+
+							$second_highest_card = $this->get_highest_flush_value( $cards );
+							unset( $cards[ $second_highest_card['order'] ] );
+							$third_highest_card  = $this->get_highest_flush_value( $cards );
+							unset( $cards[ $third_highest_card['order'] ] );
+							$fourth_highest_card = $this->get_highest_flush_value( $cards );
+							unset( $cards[ $fourth_highest_card['order'] ] );
+							$fifth_highest_card  = $this->get_highest_flush_value( $cards );
+							unset( $cards[ $fifth_highest_card['order'] ] );
 
 							$this->remove_used_cards( $hand_key, $result['cards_used'] );
 							$this->remove_suits( $hand_key );
@@ -208,7 +224,7 @@ class Game {
 								$this->hand_order[8][ $result['highest_value'] ][] = $hand_key;
 							} else {
 								// Mark as flush - it can't be anything better: next thing it can be is three of a kind.
-								$this->hand_order[5][ $result['highest_value'] ][] = $hand_key;
+								$this->hand_order[5][ $result['highest_value'] ][ $second_highest_card['rank'] ][ $third_highest_card['rank'] ][ $fourth_highest_card['rank'] ][ $fifth_highest_card['rank'] ][] = $hand_key;
 							}
 						}
 
@@ -295,6 +311,29 @@ class Game {
 				}
 
 				return $rank_value;
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Get highest flush card value that's available and remove it from the list of available values. Depends on remove_suits function.
+	 *
+	 * @access private
+	 * @param array $cards - list of cards.
+	 * @return int
+	 */
+	private function get_highest_flush_value( $cards ) {
+		$value = array();
+
+		foreach ( $this->rank_values as $rank_key => $rank_value ) { // Go from the highest ranked to lowest.
+
+			if ( ! empty( $cards[ $rank_key ] ) ) {
+				$value['order'] = $rank_key;
+				$value['rank']  = $rank_value;
+
+				return $value;
 			}
 		}
 
