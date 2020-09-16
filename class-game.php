@@ -471,15 +471,27 @@ class Game {
 		foreach ( $this->hands as $hand_key => $hand_values ) {
 
 			$this->remove_suits( $hand_key );
-			$result[3] = array_keys( $this->hands[ $hand_key ], 3, true ); // Only one option available for Full House.
+			$result[3] = array_keys( $this->hands[ $hand_key ], 3, true ); // Up to two options available for Full House.
 			$result[2] = array_keys( $this->hands[ $hand_key ], 2, true ); // Up to two options to choose from possible.
 
-			if ( ! empty( $result[3] ) && ! empty( $result[2] ) ) {
-				$result[2]   = array_combine( $result[2], $result[2] );
-				$best_of_two = $this->get_highest_value( $result[2] );
+			if ( ! empty( $result[3][0] ) && ! empty( $result[3][1] ) ) {
+				$result[3]      = array_combine( $result[3], $result[3] );
+				$best_of_threes = $this->get_highest_value( $result[3] );
 
-				unset( $this->hands[ $hand_key ][ $result[3][0] ], $this->hands[ $hand_key ][ $best_of_two['key'] ] );
-				$this->hand_order[6][ $this->rank_values[ $result[3][0] ] ][ $best_of_two['value'] ][] = $hand_key;
+				unset( $result[3][ $best_of_threes['key'] ] );
+
+				$result[2] = $result[3];
+			} else {
+				$result[3]      = array_combine( $result[3], $result[3] );
+				$best_of_threes = $this->get_highest_value( $result[3] );
+			}
+
+			if ( ! empty( $result[3] ) && ! empty( $result[2] ) ) {
+				$result[2]    = array_combine( $result[2], $result[2] );
+				$best_of_twos = $this->get_highest_value( $result[2] );
+
+				unset( $this->hands[ $hand_key ][ $best_of_threes['key'] ], $this->hands[ $hand_key ][ $best_of_twos['key'] ] );
+				$this->hand_order[6][ $this->rank_values[ $best_of_threes['value'] ] ][ $best_of_twos['value'] ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
@@ -516,6 +528,7 @@ class Game {
 	 * @return void
 	 */
 	public function check_three_of_a_kind() {
+		$result = array();
 
 		foreach ( $this->hands as $hand_key => $hand_values ) {
 
