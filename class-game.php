@@ -206,8 +206,9 @@ class Game {
 							foreach( $result['cards_used'] as $card ) {
 								$cards[ $card['rank'] ] = 1;
 							}
-							// End hotfix.
 
+							$highest_card = $this->get_highest_flush_value( $cards );
+							unset( $cards[ $highest_card['order'] ] );
 							$second_highest_card = $this->get_highest_flush_value( $cards );
 							unset( $cards[ $second_highest_card['order'] ] );
 							$third_highest_card  = $this->get_highest_flush_value( $cards );
@@ -216,6 +217,7 @@ class Game {
 							unset( $cards[ $fourth_highest_card['order'] ] );
 							$fifth_highest_card  = $this->get_highest_flush_value( $cards );
 							unset( $cards[ $fifth_highest_card['order'] ] );
+							// End hotfix.
 
 							$this->remove_used_cards( $hand_key, $result['cards_used'] );
 							$this->remove_suits( $hand_key );
