@@ -492,8 +492,7 @@ class Game {
 				$result[2]    = array_combine( $result[2], $result[2] );
 				$best_of_twos = $this->get_highest_value( $result[2] );
 
-				unset( $this->hands[ $hand_key ][ $best_of_threes['key'] ], $this->hands[ $hand_key ][ $best_of_twos['key'] ] );
-				$this->hand_order[6][ $this->rank_values[ $best_of_threes['value'] ] ][ $best_of_twos['value'] ][] = $hand_key;
+				$this->hand_order[6][ $this->rank_values[ $best_of_threes['key'] ] ][ $best_of_twos['value'] ][] = $hand_key;
 				unset( $this->hands[ $hand_key ] );
 			}
 		}
